@@ -1,0 +1,77 @@
+
+let userClickedPattern = []
+let gamePattern = []
+let buttonColors = ["red", "blue", "green", "yellow"]
+
+let nextSequence = Math.floor(Math.random() * 4)
+
+let randomChosenColor = buttonColors[nextSequence]
+
+let pushToGamePattern = (color) => {
+    gamePattern.push(color)
+}
+
+console.log(gamePattern)
+
+let userClickedPatternAdd = (color) => {
+    userClickedPattern.push(color)
+}
+
+console.log(userClickedPattern)
+
+pushToGamePattern(randomChosenColor)
+
+    const animate = (x) => {
+        switch (x) {
+        case 'red': 
+        $('.btn.red').fadeTo(100, 0.3, function() { 
+                    $(this).fadeTo(500, 1.0); 
+                })
+            break;
+            case 'yellow':
+            $('.btn.yellow').fadeTo(100, 0.3, function() { 
+                $(this).fadeTo(500, 1.0); 
+            })
+            break;
+            case 'blue':
+            $('.btn.blue').fadeTo(100, 0.3, function() { 
+                $(this).fadeTo(500, 1.0); 
+            })
+            break;
+            case 'green':
+            $('.btn.green').fadeTo(100, 0.3, function() { 
+                $(this).fadeTo(500, 1.0); 
+            })
+        }
+    }
+    const sound = (x) => {   
+        switch (x) {
+            case 'red':
+                let red = new Audio("sounds/red.mp3")
+                red.play()
+            break;
+            case 'yellow':
+                let yellow = new Audio("sounds/yellow.mp3")
+                yellow.play()
+            break;
+            case 'blue':
+                let blue = new Audio("sounds/blue.mp3")
+                blue.play()
+            break;
+            case 'green':
+                let green = new Audio("sounds/green.mp3")
+                green.play()
+            break;
+            default: console.log(randomChosenColor) 
+        }
+    }
+
+    $(".btn").click(function(event) {
+       let userChosenColor = event.target.id
+        animate(userChosenColor)
+        sound(userChosenColor)
+        userClickedPatternAdd(userChosenColor)
+    })
+
+    animate(randomChosenColor)
+    sound(randomChosenColor)

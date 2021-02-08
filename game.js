@@ -1,198 +1,85 @@
 
-let userClickedPattern = []
-let gamePattern = []
 let buttonColors = ["red", "blue", "green", "yellow"]
 
-let nextSequence = () => {
-    Math.floor(Math.random() * 4)
-} 
+let gamePattern = []
+let userClickedPattern = []
 
-let randomChosenColor = buttonColors[nextSequence]
+let started = false
+let level = 0
 
-let pushToGamePattern = (color) => {
-    gamePattern.push(color)
-}
-
-console.log(gamePattern)
-
-let userClickedPatternAdd = (color) => {
-    userClickedPattern.push(color)
-}
-
-console.log(userClickedPattern)
-
-pushToGamePattern(randomChosenColor)
-
-    const animate = (x) => {
-        switch (x) {
-            case 'red': 
-                $('.btn.red').fadeTo(100, 0.3, function() { 
-                        $(this).fadeTo(500, 1.0); 
-                    })
-            break;
-            case 'yellow':
-                $('.btn.yellow').fadeTo(100, 0.3, function() { 
-                    $(this).fadeTo(500, 1.0); 
-                })
-            break;
-            case 'blue':
-                $('.btn.blue').fadeTo(100, 0.3, function() { 
-                    $(this).fadeTo(500, 1.0); 
-                })
-            break;
-            case 'green':
-                $('.btn.green').fadeTo(100, 0.3, function() { 
-                    $(this).fadeTo(500, 1.0); 
-                })
-            break;
-            default:
-        }
-    }
-    const sound = (x) => {   
-        switch (x) {
-            case 'red':
-                let red = new Audio("sounds/red.mp3")
-                red.play()
-            break;
-            case 'yellow':
-                let yellow = new Audio("sounds/yellow.mp3")
-                yellow.play()
-            break;
-            case 'blue':
-                let blue = new Audio("sounds/blue.mp3")
-                blue.play()
-            break;
-            case 'green':
-                let green = new Audio("sounds/green.mp3")
-                green.play()
-            break;
-            default:
-        }
-    }
-
-    $(".btn").click(function(event) {
-       let userChosenColor = event.target.id
-        animate(userChosenColor)
-        sound(userChosenColor)
-        userClickedPatternAdd(userChosenColor)
-    })
-
-    $(document).keydown(function() {
+$(document).keypress(function() {
+    if (!started) {
+        $("#level-title").text("level " + level)
         nextSequence()
-    })
+        started = true
+    }
+})
+
+$(".btn").click(function() {
+
+    let userChosenColor = $(this).attr("id") 
+    userClickedPattern.push(userChosenColor)
+
+    animate(userChosenColor)
+    sound(userChosenColor)
+
+    checkAnswer(userClickedPattern.length-1)
+})
+
+let checkAnswer = (currentLevel) => {
+    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+        if (userClickedPattern.length === gamePattern.length) {
+            setTimeout(function() {
+                nextSequence()
+            }, 1000)
+        }
+    } else {
+        
+        $("h1").text("GAME OVER. Press Any Key to Start")
+    
+        $("body").addClass("game-over")
+
+        setTimeout(function() {
+            $("body").removeClass("game-over")
+        }, 200)
+
+        sound("wrong")
+
+        startOver()
+    }
+}
+
+let nextSequence = () => {
+    userClickedPattern = []
+    
+    level++
+    
+    $("#level-title").text("level " + level)
+
+    let randomNumber = Math.floor(Math.random() * 4)
+    let randomChosenColor = buttonColors[randomNumber]
+    
+    gamePattern.push(randomChosenColor)
 
     animate(randomChosenColor)
     sound(randomChosenColor)
+}
 
+let animate = (currentColor) => {
+    $("#" + currentColor).addClass("pressed")
+    
+    setTimeout(function() {
+        $("#" + currentColor).removeClass("pressed")
+    }, 100)
+}
 
+let sound = (name) => {
+    let audio = new Audio("sounds/" + name + ".mp3")
+        audio.play()
+}
 
-
-
-
-// if (levelArray.length === 0) {
-
-//     levelArray.push(levelArray++)
-// } else {
-//     $("h1").text("level ")
-// }
-
-
-
-// $(document).keydown(function() {
-//        myFunction()
-//     // $("h1").text("level " + level )
-// })
-
-
-
-// $(document).click(function() {
-//     setTimeout(function () {
-//         $(".btn").addClass("pressed")
-//     }, 400)
-// })
-
-
-
-
-
-
-// 
-
-// let userClickedPattern = []
-
-// let gamePattern = []
-
-// let buttonColors = ["red","blue","green","yellow"]
-
-// $(document).on("keypress", function(event) {
-//     let nextSequence = () => {
-//         let randomNumber =  Math.floor(Math.random() * 4)
-//         return randomNumber
-//     }
-// })
-
-// $("h1").text("test")
-
-// let randomChosenNumber = nextSequence()
-// console.log(randomChosenNumber)
-// let select = buttonColors[randomChosenNumber]
-
-// $(".btn").click(function(event) {
-//     let userChosenColor = event.target.id
-//     playSound(userChosenColor)
-//     userClickedPattern.push(userChosenColor)
-// })
-
-// gamePattern.push(select)
-
-
-
-
-//     let playSound = (name) => {
-//         
-//         switch (name) {
-//             case 'red': 
-//             $('.btn.red').fadeTo(100, 0.3, function() { 
-//                      $(this).fadeTo(500, 1.0); 
-//                  })
-//              break;
-//              case 'yellow':
-//              $('.btn.yellow').fadeTo(100, 0.3, function() { 
-//                  $(this).fadeTo(500, 1.0); 
-//              })
-//              break;
-//              case 'blue':
-//              $('.btn.blue').fadeTo(100, 0.3, function() { 
-//                  $(this).fadeTo(500, 1.0); 
-//              })
-//              break;
-//              case 'green':
-//              $('.btn.green').fadeTo(100, 0.3, function() { 
-//                  $(this).fadeTo(500, 1.0); 
-//              })
-//          }
-//     }
-
-//     switch (select) {
-//         case 'red':
-//             let red = new Audio("sounds/red.mp3")
-//             red.play()
-//         break;
-//         case 'yellow':
-           
-//             let yellow = new Audio("sounds/yellow.mp3")
-//             yellow.play()
-//         break;
-//         case 'blue':
-           
-//             let blue = new Audio("sounds/blue.mp3")
-//             blue.play()
-//         break;
-//         case 'green':
-           
-//             let green = new Audio("sounds/green.mp3")
-//             green.play()
-//         break; 
-//     }
-
-// console.log(gamePattern)
+let startOver = () => {
+    gamePattern = []    
+    started = false
+    level = 0   
+}
